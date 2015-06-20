@@ -26,12 +26,6 @@
 ;; `translate-shell.el' is an unofficial Emacs front-end for translate-shell
 ;; <https://github.com/soimort/translate-shell>. translate-shell is s a
 ;; command-line translator powered by Google Translate.
-;;
-;;
-;; TODO
-;; ====
-;;
-;; - Cache search result
 
 
 ;;; Code:
@@ -47,6 +41,8 @@
 
 (defvar translate-shell-history nil)
 
+(defvar translate-shell-cache nil)      ; type: alist, format: (('word . "explanation"))
+
 ;;;###autoload
 (defun translate-shell-brief (word)
   "Show the explanation of WORD using translate-shell in the echo area."
@@ -60,11 +56,16 @@
                     "Search : "))
           (string (read-string prompt nil 'translate-shell-history default)))
      (list string)))
-  (let ((result
-         (shell-command-to-string
-          (format translate-shell-command (shell-quote-argument word)))))
-    (message (substring result
-                        0 (string-match "\n" result)))))
+  (let ((word-sym (intern word)))
+    (if (assq word-sym translate-shell-cache)
+        (message (assoc-default word-sym translate-shell-cache))
+      (let* ((output
+              (shell-command-to-string
+               (format translate-shell-command (shell-quote-argument word))))
+             (result (substring output
+                                0 (string-match "\n" output))))
+        (message result)
+        (add-to-list 'translate-shell-cache (cons word-sym result))))))
 
 (provide 'translate-shell)
 ;;; translate-shell.el ends here
