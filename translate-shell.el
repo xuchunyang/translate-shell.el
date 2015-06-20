@@ -32,7 +32,6 @@
 ;; ====
 ;;
 ;; - Cache search result
-;; - Save search history
 
 
 ;;; Code:
@@ -46,6 +45,8 @@
   "The translate-shell command."
   :type 'string)
 
+(defvar translate-shell-history nil)
+
 ;;;###autoload
 (defun translate-shell-brief (word)
   "Show the explanation of WORD using translate-shell in the echo area."
@@ -57,7 +58,7 @@
           (prompt (if (stringp default)
                       (format "Search (default \"%s\"): " default)
                     "Search : "))
-          (string (read-string prompt nil nil default)))
+          (string (read-string prompt nil 'translate-shell-history default)))
      (list string)))
   (let ((result
          (shell-command-to-string
