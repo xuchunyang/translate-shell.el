@@ -45,14 +45,16 @@
 
 (defvar translate-shell-history nil)
 
-(defvar translate-shell-cache nil)      ; type: alist, format: (('word . "explanation"))
+(defvar translate-shell-brief-cache nil) ; type: alist, format: (('word . "explanation"))
+(defvar translate-shell-cache nil) ; type: alist, format: (('word . "explanation"))
 
 (defun translate-shell--read-string ()
   "A `read-string' wrapper for translate-shell."
   (let* ((default (if (use-region-p)
                       (buffer-substring-no-properties
                        (region-beginning) (region-end))
-                    (thing-at-point 'word)))
+                    (let ((word (thing-at-point 'word)))
+                      (when word (substring-no-properties word)))))
          (prompt (if (stringp default)
                      (format "Search (default \"%s\"): " default)
                    "Search : ")))
@@ -64,29 +66,32 @@
   (interactive
    (list (translate-shell--read-string)))
   (let ((word-sym (intern word)))
-    (if (assq word-sym translate-shell-cache)
-        (message (assoc-default word-sym translate-shell-cache))
+    (if (assq word-sym translate-shell-brief-cache)
+        (message (assoc-default word-sym translate-shell-brief-cache))
       (let* ((output
               (shell-command-to-string
                (format translate-shell-brief-command (shell-quote-argument word))))
              (result (substring output
                                 0 (string-match "\n" output))))
-        ;; TODO: Improve display
         (message result)
-        (add-to-list 'translate-shell-cache (cons word-sym result))))))
+        (add-to-list 'translate-shell-brief-cache (cons word-sym result))))))
 
 ;;;###autoload
 (defun translate-shell (word)
   "Show the explanation of WORD in buffer."
   (interactive
    (list (translate-shell--read-string)))
-  (with-current-buffer (get-buffer-create "*Translate Shell*")
-    (erase-buffer)
-    ;; TODO: Enable color output produced by translate-shell (possible? how)
-    (call-process-shell-command (format translate-shell-command
-                                        (shell-quote-argument word))
-                                nil t)
-    (display-buffer (current-buffer))))
+  (let ((word-sym (intern word))
+        result)
+    (if (assq word-sym translate-shell-cache)
+        (setq result (assoc-default word-sym translate-shell-cache))
+      (setq result (shell-command-to-string (format translate-shell-command
+                                                    (shell-quote-argument word))))
+      (add-to-list 'translate-shell-cache (cons word-sym result)))
+    (with-current-buffer (get-buffer-create "*Translate Shell*")
+      (erase-buffer)
+      (insert result)
+      (display-buffer (current-buffer)))))
 
 (provide 'translate-shell)
 ;;; translate-shell.el ends here
