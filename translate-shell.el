@@ -114,8 +114,8 @@
                     (let ((word (thing-at-point 'word)))
                       (when word (substring-no-properties word)))))
          (prompt (if (stringp default)
-                     (format "Search (default \"%s\"): " default)
-                   "Search : ")))
+                     (format "Google Translate (default \"%s\"): " default)
+                   "Google Translate: ")))
     (read-string prompt nil 'translate-shell-history default)))
 
 ;;;###autoload
