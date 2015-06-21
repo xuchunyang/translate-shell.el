@@ -76,7 +76,7 @@
 ;;     :config
 ;;     ;; <https://translate.google.com> is blocked in China for no apparent
 ;;     ;; reason. No one ever asked my option.
-;;     (setq translate-shell-command "proxychains4 -q trans -t zh %s"
+;;     (setq translate-shell-command "proxychains4 -q trans -t en %s"
 ;;           translate-shell-brief-command "proxychains4 -q trans -brief -t zh %s"))
 
 
