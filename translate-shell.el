@@ -105,8 +105,7 @@
   (let* ((default (if (use-region-p)
                       (buffer-substring-no-properties
                        (region-beginning) (region-end))
-                    (let ((word (thing-at-point 'word)))
-                      (when word (substring-no-properties word)))))
+                    (substring-no-properties (or (thing-at-point 'word) ""))))
          (prompt (if (stringp default)
                      (format "Search (default \"%s\"): " default)
                    "Search : ")))
