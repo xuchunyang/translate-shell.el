@@ -83,9 +83,12 @@
 ;;; Code:
 
 (defgroup translate-shell nil
-  "An unofficial Emacs front-end for <https://github.com/soimort/translate-shell>."
+  "An unofficial Emacs front-end for translate-shell."
   :group 'tools
-  :prefix "translate-shell-")
+  :prefix "translate-shell-"
+  :link '(emacs-commentary-link :tag "commentary" "translate-shell.el")
+  :link '(emacs-library-link :tag "lisp file" "translate-shell.el")
+  :link '(url-link :tag "Github" "https://github.com/xuchunyang/translate-shell.el"))
 
 (defcustom translate-shell-command "trans -t zh %s"
   "The translate-shell command for the `translate-shell' command."
@@ -95,10 +98,13 @@
   "The translate-shell command for the `translate-shell-brief' command."
   :type 'string)
 
-(defvar translate-shell-history nil)
+(defvar translate-shell-history nil
+  "History list for `translate-shell' and `translate-shell-brief'.")
 
-(defvar translate-shell-brief-cache nil) ; type: alist, format: (('word . "explanation"))
-(defvar translate-shell-cache nil) ; type: alist, format: (('word . "explanation"))
+(defvar translate-shell-cache nil
+  "Cache alist for `translate-shell'.")
+(defvar translate-shell-brief-cache nil
+  "Cache alist for `translate-shell-brief'.")
 
 (defun translate-shell--read-string ()
   "A `read-string' wrapper for translate-shell."
