@@ -142,6 +142,7 @@
     (with-current-buffer (get-buffer-create "*Translate Shell*")
       (erase-buffer)
       (insert result)
+      (goto-char (point-min))
       (display-buffer (current-buffer)))))
 
 (provide 'translate-shell)
