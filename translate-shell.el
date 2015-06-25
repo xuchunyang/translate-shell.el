@@ -150,7 +150,12 @@
       (erase-buffer)
       (insert result)
       (goto-char (point-min))
-      (display-buffer (current-buffer)))))
+      (display-buffer (current-buffer))
+      ;; Set up `imenu'
+      (setq imenu-generic-expression
+            '(("Sections"
+               "^\\(adjective\\)\\|\\(adverb\\)\\|\\(noun\\)\\|\\(verb\\)\\|\\(Synonyms\\)\\|\\(Examples\\)\\|\\(See also\\)"
+               0))))))
 
 (provide 'translate-shell)
 ;;; translate-shell.el ends here
