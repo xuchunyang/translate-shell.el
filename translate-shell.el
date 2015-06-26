@@ -158,8 +158,8 @@
       (display-buffer (current-buffer))
       ;; Set up `imenu'
       (setq imenu-generic-expression
-            '(("Sections"
-               "^\\(adjective\\)\\|\\(adverb\\)\\|\\(noun\\)\\|\\(verb\\)\\|\\(Synonyms\\)\\|\\(Examples\\)\\|\\(See also\\)"
+            `(("Sections"
+               ,(rx (and line-start (or "adjective" "adverb" "noun" "verb" "Synonyms" "Examples" "See also") line-end))
                0))))))
 
 (provide 'translate-shell)
