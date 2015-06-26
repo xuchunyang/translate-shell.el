@@ -78,7 +78,12 @@
 ;;     ;; reason. No one ever asked my option.
 ;;     (setq translate-shell-command "proxychains4 -q trans -t en %s"
 ;;           translate-shell-brief-command "proxychains4 -q trans -brief -t zh %s"))
-
+;;
+;;
+;; TODO
+;; ====
+;;
+;; - [ ] Add more functions to the result buffer, then if needs, add a header line to indicate usage
 
 ;;; Code:
 
